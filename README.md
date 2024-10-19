@@ -12,3 +12,12 @@
 - embedding: default value of the success/error message output frame.
 - ids: book id generation code.
 - inuitoko_v120: main. not yet modulated.
+
+## DBs
+### public
+- book: `book_id` | `title` | `series` | `byname1` | `byname2` | `location` | `can_rent`
+  - asd
+- category:
+- reader:
+- rent:
+- savings: 
