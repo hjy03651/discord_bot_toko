@@ -4,8 +4,6 @@
 - Variations of the code are allowed.
 - Any other issues will be deleted at any time.
 
-===
-
 ## explanation
 - dbclass_main: for accessing the main schema.
 - dbtool_book: book return/loan/add/modify/delete in conjunction with 'dbclass_main'.
