@@ -291,4 +291,3 @@ class ManageBook(Databases):
         return result
 
 book = ManageBook()
-print(book.get_rent_list('한재영'))
