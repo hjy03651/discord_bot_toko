@@ -2,7 +2,7 @@
 ## info
 - Codes for Discord bots for accessing psql and for use on **private servers**.
 - Variations of the code are allowed.
-- Any other issues will be deleted at any time.
+- It'll be deleted at any time if there are any probs.
 
 ## explanation
 - dbclass_main: for accessing the main schema.
