@@ -11,7 +11,7 @@ from DBtoolEvent import ManageEvents
 
 # URL & lists =================================================
 event = ManageEvents()
-url = 'https://img.freepik.com/premium-photo/discord-logo-icon-vector-illustration_895118-9640.jpg'
+url = "https://img.freepik.com/premium-photo/discord-logo-icon-vector-illustration_895118-9640.jpg"
 
 
 # Class =======================================================
@@ -21,7 +21,9 @@ class Event(commands.Cog):
 
     @app_commands.command(name="event", description="이벤트 참여자를 집계합니다")
     @app_commands.describe(title="이벤트명", number="당첨자 수")
-    async def finish_event(self, interaction: discord.Interaction, title: str, number: int):
+    async def finish_event(
+        self, interaction: discord.Interaction, title: str, number: int
+    ):
         if interaction.user.avatar is not None:
             avatar = interaction.user.avatar.url
         else:
@@ -29,7 +31,7 @@ class Event(commands.Cog):
 
         role = discord.utils.get(interaction.user.roles, id=1181080308590858361)
         if role is None:
-            embed = e.get_embed(':warning: 명령어 사용 권한이 없습니다.', error=True)
+            embed = e.get_embed(":warning: 명령어 사용 권한이 없습니다.", error=True)
             embed.set_author(name=interaction.user.display_name, icon_url=avatar)
             await interaction.response.send_message(embed=embed)
             return
@@ -55,16 +57,16 @@ class Event(commands.Cog):
 
             winners = event.get_random(title, number)
 
-            ctx = ''
+            ctx = ""
             for win in winners:
-                ctx += f'{win}\n'
+                ctx += f"{win}\n"
 
-            embed = e.get_embed(ctx, title='이벤트 당첨 축하드립니다!')
+            embed = e.get_embed(ctx, title="이벤트 당첨 축하드립니다!")
             embed.set_author(name=interaction.user.display_name, icon_url=avatar)
             await interaction.response.send_message(embed=embed)
 
         else:
-            embed = e.get_embed(':warning: 이벤트 참여자가 없습니다.', error=True)
+            embed = e.get_embed(":warning: 이벤트 참여자가 없습니다.", error=True)
             embed.set_author(name=interaction.user.display_name, icon_url=avatar)
             await interaction.response.send_message(embed=embed)
 

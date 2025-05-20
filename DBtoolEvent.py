@@ -75,9 +75,9 @@ class ManageEvents(Databases):
         else:
             jack, rank = temp[0][0], 65537
 
-        worm = 0.37 ** (rank-1)
+        worm = 0.37 ** (rank - 1)
 
-        return [0.88 ** jack, 0.92 ** jack, 1.3 ** jack, worm]
+        return [0.88**jack, 0.92**jack, 1.3**jack, worm]
 
     def get_items(self, name):
         sql = f"select clover, rotten from events.halloween2024\
@@ -106,10 +106,10 @@ class ManageEvents(Databases):
         return self.cursor.fetchall()
 
     def get_my_rank(self, name):
-        sql = (f"select row_number\
+        sql = f"select row_number\
                 from(select *, row_number() over (order by length desc)\
                 as row_number from events.halloween2024 where student_name != '21/한재영') subquery\
-                where student_name = '{name}';")
+                where student_name = '{name}';"
         self.cursor.execute(sql)
         return self.cursor.fetchall()[0][0]
 
@@ -126,7 +126,7 @@ class ManageEvents(Databases):
         sql = f"select length from events.halloween2024 where student_name = '{name}'"
         self.cursor.execute(sql)
         length = self.cursor.fetchall()[0][0]
-        ran = (round(random.uniform(0.01, 1.00), 2))
+        ran = round(random.uniform(0.01, 1.00), 2)
 
         sql = f"update events.halloween2024 set length = {length - ran} where student_name = '{name}';"
         self.cursor.execute(sql)
