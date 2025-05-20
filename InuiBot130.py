@@ -24,7 +24,7 @@ load_dotenv()
 token = os.getenv("DISCORD_TOKEN")
 app_id = os.getenv("DISCORD_APPID")
 
-bot = commands.Bot(command_prefix='$', intents=intents, application_id=app_id)
+bot = commands.Bot(command_prefix="$", intents=intents, application_id=app_id)
 
 first_ready = True
 
@@ -47,7 +47,7 @@ for i in channel_list:
 
 
 async def load_extensions():
-    for filename in 'BookRetrieval Event ForFun Saving Sql'.split():
+    for filename in "BookRetrieval Event ForFun Saving Sql".split():
         await bot.load_extension(f"Cogs.{filename}")
 
 
@@ -66,7 +66,9 @@ async def on_ready():
     first_ready = False
 
     print(f"\n[READY] 봇 로그인 완료: {bot.user} (ID: {bot.user.id})")
-    print(f"[READY] 총 {len(bot.tree.get_commands())}개의 슬래시 커맨드를 로드했습니다.")
+    print(
+        f"[READY] 총 {len(bot.tree.get_commands())}개의 슬래시 커맨드를 로드했습니다."
+    )
 
 
 @bot.event
@@ -78,16 +80,17 @@ async def on_voice_state_update(member, before, after):
     :param after: get after channel
     :return: None
     """
-    channels = {1272081235338068040: "VC-1",
-                1272081519632060436: "VC-2",
-                1272081537499926591: "VC-3",
-                1272081866752659489: "VC-conf",
-                1272082585798971442: "VC-w1",
-                1272243777989382214: "VC-w2",
-                1272082611656982539: "VC-st",
-                1272082622981345361: "VC-bed",
-                1346093416345505792: "VC-hehe"
-                }
+    channels = {
+        1272081235338068040: "VC-1",
+        1272081519632060436: "VC-2",
+        1272081537499926591: "VC-3",
+        1272081866752659489: "VC-conf",
+        1272082585798971442: "VC-w1",
+        1272243777989382214: "VC-w2",
+        1272082611656982539: "VC-st",
+        1272082622981345361: "VC-bed",
+        1346093416345505792: "VC-hehe",
+    }
     guild = member.guild
 
     now = datetime.now()
@@ -97,22 +100,30 @@ async def on_voice_state_update(member, before, after):
     if before.channel is not None and after.channel is None:
         before_role = discord.utils.get(guild.roles, name=channels[before.channel.id])
         if channels[before.channel.id] != "VC-hehe":
-            await bot.get_command('clear')(before)
+            await bot.get_command("clear")(before)
         await member.remove_roles(before_role)
-        print(f"Removed role '{channels[before.channel.id]}' from {member.display_name} at {date}")
+        print(
+            f"Removed role '{channels[before.channel.id]}' from {member.display_name} at {date}"
+        )
 
     elif after.channel.id in list(channels.keys()):
         after_role = discord.utils.get(guild.roles, name=channels[after.channel.id])
         await member.add_roles(after_role)
 
         if before.channel is None:
-            print(f"Assigned role '{channels[after.channel.id]}' to {member.display_name} at {date}")
+            print(
+                f"Assigned role '{channels[after.channel.id]}' to {member.display_name} at {date}"
+            )
         elif before.channel != after.channel:
-            before_role = discord.utils.get(guild.roles, name=channels[before.channel.id])
+            before_role = discord.utils.get(
+                guild.roles, name=channels[before.channel.id]
+            )
             if channels[before.channel.id] != "VC-hehe":
-                await bot.get_command('clear')(before)
+                await bot.get_command("clear")(before)
             await member.remove_roles(before_role)
-            print(f"Changed role '{channels[after.channel.id]}' to {member.display_name} at {date}")
+            print(
+                f"Changed role '{channels[after.channel.id]}' to {member.display_name} at {date}"
+            )
 
 
 @bot.command()
@@ -125,20 +136,20 @@ async def clear(ctx):
 @commands.is_owner()
 async def reload(ctx, extension: str):
     try:
-        if extension == 'help':
-            files = 'BookRetrieval Event ForFun Saving Sql'.split()
-            context = '\n'.join(['## 현재 Cogs 리스트'] + [f'> {cog}' for cog in files])
+        if extension == "help":
+            files = "BookRetrieval Event ForFun Saving Sql".split()
+            context = "\n".join(["## 현재 Cogs 리스트"] + [f"> {cog}" for cog in files])
             await ctx.send(context)
         else:
             now = datetime.now()
             date = now.strftime("%y/%m/%d %H:%M")
 
-            await bot.reload_extension(f'Cogs.{extension}')
-            await ctx.send(f'{extension} Cog reloaded!')
+            await bot.reload_extension(f"Cogs.{extension}")
+            await ctx.send(f"{extension} Cog reloaded!")
             await bot.tree.sync()
-            print(f'{extension} cog reloaded at {date}')
+            print(f"{extension} cog reloaded at {date}")
     except Exception as e:
-        await ctx.send(f'err: {e}')
+        await ctx.send(f"err: {e}")
 
 
 bot.run(token)

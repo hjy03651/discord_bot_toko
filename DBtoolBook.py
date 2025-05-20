@@ -2,6 +2,7 @@ from DBclass import Databases
 from datetime import datetime
 import psycopg2
 import ids
+
 # try: except has been abandoned
 
 
@@ -70,7 +71,7 @@ class ManageBook(Databases):
             alpha_part = ids.increment_alpha(max_id[0][0][:3])
 
         if series < 10:
-            num_part = '0' + str(int(series * 10))
+            num_part = "0" + str(int(series * 10))
         else:
             num_part = str(int(series * 10))
 
@@ -91,7 +92,7 @@ class ManageBook(Databases):
         :param location: the location which you want to search.
         :return: new_result (the location of the book)
         """
-        if location[-1] == '%':
+        if location[-1] == "%":
             # search all
             where = f"location like '{location}'"
         else:
@@ -145,14 +146,18 @@ class ManageBook(Databases):
         for book_data in result:
             db_id, db_loc, db_name, db_num, db_rent = book_data
             if db_num.is_integer():
-                new_result.append((db_id, db_loc.strip(), db_name.strip(), int(db_num), db_rent))
+                new_result.append(
+                    (db_id, db_loc.strip(), db_name.strip(), int(db_num), db_rent)
+                )
             else:
                 new_result.append(book_data)
 
         return new_result
 
     # Insertion ========================================================
-    def insert_book_data(self, title, series, byname1, byname2, location, category, language):
+    def insert_book_data(
+        self, title, series, byname1, byname2, location, category, language
+    ):
         """
         Insert the data of the books in DB.
         :param title: title of the book. ch(50), not null.
@@ -187,7 +192,7 @@ class ManageBook(Databases):
         :param book_id: the id of the book.
         :return: None
         """
-        if column in ['category', 'language']:
+        if column in ["category", "language"]:
             sql = f"update public.category set {column} = '{input_str}' "
         else:
             sql = f"update public.book set {column} = '{input_str}' "
@@ -236,10 +241,10 @@ class ManageBook(Databases):
         student_num = self.cursor.fetchall()[0][0]
 
         if is_return:
-            self.update_book_data('can_rent', 'true', book_id)
+            self.update_book_data("can_rent", "true", book_id)
             sql = f"delete from public.rent where book_id = '{book_id}';"
         else:
-            self.update_book_data('can_rent', 'false', book_id)
+            self.update_book_data("can_rent", "false", book_id)
             sql = f"insert into public.rent values\
                     ('{student_num}', '{book_id}', '{date}');"
 
@@ -259,7 +264,7 @@ class ManageBook(Databases):
 
     # SQL ==============================================================
     def get_sql(self, command, sql):
-        if command == 'select':
+        if command == "select":
             sql = f"{command} {sql}"
             self.cursor.execute(sql)
             return self.cursor.fetchall()
