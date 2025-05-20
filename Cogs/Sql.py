@@ -1,6 +1,5 @@
 # Import modules ===============================================
 import discord
-import asyncio  # for ascyn functions
 import psycopg2  # for connecting psql
 import embedding as e
 

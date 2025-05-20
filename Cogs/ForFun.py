@@ -1,6 +1,5 @@
 # Import modules ===============================================
 import discord
-import asyncio  # for ascyn functions
 import urllib.request  # for url
 import requests  # for url also
 import random
@@ -8,7 +7,6 @@ import embedding as e
 
 from discord import app_commands
 from discord.ext import commands
-from PIL import Image
 
 
 # URL & lists =================================================
@@ -274,7 +272,7 @@ class ForFun(commands.Cog):
         if word.lower() == "q":
             used_words.clear()
             await interaction.response.send_message(
-                f"초기화됐습니다! 먼저 시작하세여 <a:InuiWaveYay:1272086403135832125>"
+                "초기화됐습니다! 먼저 시작하세여 <a:InuiWaveYay:1272086403135832125>"
             )
             return
         elif word in used_words:

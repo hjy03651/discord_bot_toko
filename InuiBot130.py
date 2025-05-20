@@ -1,12 +1,8 @@
 # Import modules ===============================================
 import discord
-import asyncio
 import sys
 import os
-import requests
-import time
 
-from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 from datetime import datetime

@@ -1,7 +1,5 @@
 # Import modules ===============================================
 import discord
-import asyncio  # for ascyn functions
-import psycopg2  # for connecting psql
 import embedding as e
 
 from discord import app_commands
@@ -418,7 +416,7 @@ class BookRetrieval(commands.Cog):
 
         role = discord.utils.get(interaction.user.roles, id=1181080308590858361)
         if role is None:
-            embed = e.get_embed(f":warning: 명령어 사용 권한이 없습니다.", error=True)
+            embed = e.get_embed(":warning: 명령어 사용 권한이 없습니다.", error=True)
             embed.set_author(name=interaction.user.display_name, icon_url=avatar)
             await interaction.response.send_message(embed=embed)
             return

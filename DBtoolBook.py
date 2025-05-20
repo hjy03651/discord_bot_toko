@@ -1,6 +1,5 @@
 from DBclass import Databases
 from datetime import datetime
-import psycopg2
 import ids
 
 # try: except has been abandoned

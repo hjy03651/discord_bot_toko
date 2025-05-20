@@ -1,9 +1,7 @@
 # Import modules ===============================================
 import discord
 import asyncio  # for ascyn functions
-import psycopg2  # for connecting psql
 import embedding as e
-import time
 
 from discord import app_commands
 from discord.ext import commands
@@ -54,7 +52,7 @@ class Saving(commands.Cog):
                 return
 
             context = f">>> {name.mention}님의 물품을 {formatted_date}에 정상적으로 보관처리 했습니다!\n"
-            context += f"짐이 철수되지 않았을 경우, 6일 후에 DM을 보내드리겠습니다."
+            context += "짐이 철수되지 않았을 경우, 6일 후에 DM을 보내드리겠습니다."
             embed = e.get_embed(context, title="짐 보관이 시작되었습니다.")
             embed.set_author(name=name.display_name, icon_url=member_avatar)
             await interaction.response.send_message(embed=embed)
@@ -88,7 +86,7 @@ class Saving(commands.Cog):
 
         if interaction.channel_id not in (1279810905009426474, 1272086876638937130):
             embed = e.get_embed(
-                f"이 커맨드는 특정 채널에서만 사용 가능합니다!", error=True
+                "이 커맨드는 특정 채널에서만 사용 가능합니다!", error=True
             )
             embed.set_author(name=interaction.user.display_name, icon_url=avatar)
             await interaction.response.send_message(embed=embed)
