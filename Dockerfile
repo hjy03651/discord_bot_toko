@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "inuitoko_v120.py"]
+CMD ["python", "InuiBot130.py"]
