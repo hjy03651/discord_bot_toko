@@ -1,1 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
 .env
+
+# macOS
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# Dump/Log/Cache
+*.log
+*.dump
+*.sqlite3
+
+# pytest cache
+.pytest_cache/
+
+# mypy / coverage / profiling
+.mypy_cache/
+.coverage
+htmlcov/
+profiler_output/
+
+# Jupyter/IPython
+.ipynb_checkpoints/
+
+# IDEs
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Other build artifacts
+dist/
+build/
+*.egg-info/
