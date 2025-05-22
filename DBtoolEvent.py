@@ -90,18 +90,18 @@ class ManageEvents(Databases):
             return self.cursor.fetchall()[0]
 
     def initialize_pumpkin(self):
-        sql = f"delete from events.halloween2024 where length > 0;"
+        sql = "delete from events.halloween2024 where length > 0;"
         self.cursor.execute(sql)
         self.db.commit()
 
     def get_rank(self):
-        sql = f"select student_name, length from events.halloween2024 where student_name != '21/한재영'\
+        sql = "select student_name, length from events.halloween2024 where student_name != '21/한재영'\
                 order by length desc;"
         self.cursor.execute(sql)
         return self.cursor.fetchall()[:3]
 
     def get_all(self):
-        sql = f"select student_name, length, jackolantern from events.halloween2024 order by length desc;"
+        sql = "select student_name, length, jackolantern from events.halloween2024 order by length desc;"
         self.cursor.execute(sql)
         return self.cursor.fetchall()
 
@@ -193,7 +193,7 @@ class ManageEvents(Databases):
         return self.cursor.fetchall()[0][0]
 
     def get_all_mem(self):
-        sql = f"select student_name from events.halloween2024;"
+        sql = "select student_name from events.halloween2024;"
         self.cursor.execute(sql)
         return self.cursor.fetchall()
 

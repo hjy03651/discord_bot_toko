@@ -1,16 +1,11 @@
 # Import modules ===============================================
-import discord
-import asyncio
-import sys
 import os
-import requests
-import time
-
-from discord import app_commands
-from discord.ext import commands
-from dotenv import load_dotenv
+import sys
 from datetime import datetime
 
+import discord
+from discord.ext import commands
+from dotenv import load_dotenv
 
 # Intents (for bot) ===========================================
 intents = discord.Intents.default()
@@ -20,12 +15,15 @@ intents.voice_states = True  # 음성채팅 감지 권한
 intents.guilds = True  # 서버 연결 권한
 intents.members = True  # 멤버 열람 권한
 
+# Load environment variables
 load_dotenv()
 token = os.getenv("DISCORD_TOKEN")
 app_id = os.getenv("DISCORD_APPID")
 
+# Create bot instance
 bot = commands.Bot(command_prefix="$", intents=intents, application_id=app_id)
 
+# State variable to run setup code once
 first_ready = True
 
 """channel_list = ['VC-1', 'VC-2', 'VC-3', 'VC-CONF', 'VC-W1', 'VC-W2', 'VC-st', 'VC-bed', 'VC-hehe']
@@ -60,7 +58,6 @@ async def setup_hook():
 @bot.event
 async def on_ready():
     global first_ready
-
     if not first_ready:
         return
     first_ready = False
@@ -141,15 +138,16 @@ async def reload(ctx, extension: str):
             context = "\n".join(["## 현재 Cogs 리스트"] + [f"> {cog}" for cog in files])
             await ctx.send(context)
         else:
-            now = datetime.now()
-            date = now.strftime("%y/%m/%d %H:%M")
-
+            now = datetime.now().strftime("%y/%m/%d %H:%M")
             await bot.reload_extension(f"Cogs.{extension}")
             await ctx.send(f"{extension} Cog reloaded!")
             await bot.tree.sync()
-            print(f"{extension} cog reloaded at {date}")
+            print(f"{extension} cog reloaded at {now}")
     except Exception as e:
         await ctx.send(f"err: {e}")
 
 
-bot.run(token)
+if token:
+    bot.run(token)
+else:
+    print("Token not found. Please set the DISCORD_TOKEN environment variable.")

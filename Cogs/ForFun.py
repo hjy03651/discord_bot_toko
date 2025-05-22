@@ -1,15 +1,13 @@
 # Import modules ===============================================
-import discord
-import asyncio  # for ascyn functions
-import urllib.request  # for url
-import requests  # for url also
 import random
-import embedding as e
+import urllib.request  # for url
 
+import discord
+import requests  # for url also
 from discord import app_commands
 from discord.ext import commands
-from PIL import Image
 
+import embedding as e
 
 # URL & lists =================================================
 url = "https://img.freepik.com/premium-photo/discord-logo-icon-vector-illustration_895118-9640.jpg"
@@ -154,7 +152,7 @@ class ForFun(commands.Cog):
     @app_commands.command(name="떠올려", description="두근두근")
     async def dokidoki(self, interaction: discord.Interaction):
         urllib.request.urlretrieve("https://buly.kr/31RhHua", "dokidoki.png")
-        image = discord.File("dokidoki.png", filename="dokidoki.png")
+        image = discord.File("images/dokidoki.png", filename="dokidoki.png")
 
         embed = discord.Embed(
             title="두근거림을", description="떠올리는 거야!", color=0x4788B6
@@ -169,7 +167,7 @@ class ForFun(commands.Cog):
             "https://media1.tenor.com/m/fV1krxBGQWAAAAAd/kaguya-houraisan-kaguya-houraisan-exploding.gif",
             "kaguya.gif",
         )
-        image = discord.File("kaguya.gif", filename="kaguya.gif")
+        image = discord.File("images/kaguya.gif", filename="kaguya.gif")
 
         embed = discord.Embed(title="", description="", color=0x4788B6)
         embed.set_image(url="attachment://kaguya.gif")
@@ -242,7 +240,7 @@ class ForFun(commands.Cog):
             "https://postfiles.pstatic.net/MjAyNDA5MjFfMjIy/MDAxNzI2OTA3MjkzMTY0.PjznS4W3dBo7u_dVgqLif_1ayhw2HJyyhXE27S4N2dQg.PCvFyyjjyMcIONOu1JcKpLpQAjE-B1JCsW9K8UdOvkQg.JPEG/6.jpg?type=w3840",
         ]
         urllib.request.urlretrieve(random.choice(urls), "pome.png")
-        image = discord.File("pome.png", filename="pome.png")
+        image = discord.File("images/pome.png", filename="pome.png")
 
         embed = discord.Embed(color=0x4788B6)
         embed.set_image(url="attachment://pome.png")
@@ -274,7 +272,7 @@ class ForFun(commands.Cog):
         if word.lower() == "q":
             used_words.clear()
             await interaction.response.send_message(
-                f"초기화됐습니다! 먼저 시작하세여 <a:InuiWaveYay:1272086403135832125>"
+                "초기화됐습니다! 먼저 시작하세여 <a:InuiWaveYay:1272086403135832125>"
             )
             return
         elif word in used_words:
