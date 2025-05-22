@@ -1,0 +1,34 @@
+name: Deploy to Remote Server
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH Key
+        run: |
+          echo "${{ secrets.SSH_KEY }}" | base64 -d > key.pem
+          chmod 600 key.pem
+
+      - name: Pull and Restart on Server
+        run: |
+          ssh -i key.pem -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ${{ secrets.REMOTE_DIR }}
+            echo "[INFO] Pulling latest changes..."
+            git pull origin main
+            echo "[INFO] Stopping old container..."
+            docker stop discord-bot-toko || true
+            docker rm discord-bot-toko || true
+            echo "[INFO] Rebuilding image..."
+            docker build -t discord-bot-toko .
+            echo "[INFO] Starting container..."
+            docker run -d --name discord-bot-toko --env-file .env --rm discord-bot-toko
+          EOF
