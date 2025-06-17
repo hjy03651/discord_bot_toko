@@ -29,22 +29,20 @@ def get_next_word_from_api(last_letter):
     # }
 
     # response = requests.get(api_url, params=params)
+    # if response.status_code != 200:
+    #     return None
+
+    # data = response.json()
+
+    # if "channel" in data and "item" in data["channel"]:
+    #     words = [
+    #         item["word"].replace("-", "")
+    #         for item in data["channel"]["item"]
+    #         if item["word"] not in used_words and len(item["word"]) > 1
+    #     ]
+    #     return random.choice(words) if words else None
+
     return None  # Temporary return until API is configured
-
-    if response.status_code != 200:
-        return None
-
-    data = response.json()
-
-    if "channel" in data and "item" in data["channel"]:
-        words = [
-            item["word"].replace("-", "")
-            for item in data["channel"]["item"]
-            if item["word"] not in used_words and len(item["word"]) > 1
-        ]
-        return random.choice(words) if words else None
-
-    return None
 
 
 def has_final_consonant(char):
@@ -264,9 +262,10 @@ class ForFun(commands.Cog):
             await interaction.response.send_message("프롬프트를 입력해주세요!")
             return
 
-        await interaction.response.send_message("답변 생성 중...")
-        response = await get_gpt_response(prompt)
-        await interaction.followup.send(response)
+        # TODO: Enable when openai is configured
+        await interaction.response.send_message("GPT 기능은 현재 사용할 수 없습니다.")
+        # response = await get_gpt_response(prompt)
+        # await interaction.followup.send(response)
 
     @app_commands.command(name="끝말잇기", description="듐바륨")
     async def shiritori(self, interaction: discord.Interaction, word: str):
