@@ -14,11 +14,11 @@ jobs:
       - name: Setup SSH Key
         run: |
           echo "${{ secrets.KEY }}" > KEY.pem
-          chmod 600 LightsailDefaultKey-ap-northeast-2.pem
+          chmod 600 KEY.pem
 
       - name: Deploy to Server
         run: |
-          ssh -i Key.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -i KEY.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd toko
             echo "[INFO] Pulling latest changes..."
             git pull origin main

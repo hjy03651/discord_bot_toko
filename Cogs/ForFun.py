@@ -16,18 +16,20 @@ used_words = []
 
 # Functions ===================================================
 def get_next_word_from_api(last_letter):
-    params = {
-        "key": words_api,
-        "q": last_letter,
-        "req_type": "json",
-        "advanced": "y",
-        "method": "start",
-        "type1": "word",
-        "pos": [1, 2],
-        "num": 100,
-    }
+    # TODO: Define words_api and api_url or get from environment
+    # params = {
+    #     "key": words_api,
+    #     "q": last_letter,
+    #     "req_type": "json",
+    #     "advanced": "y",
+    #     "method": "start",
+    #     "type1": "word",
+    #     "pos": [1, 2],
+    #     "num": 100,
+    # }
 
-    response = requests.get(api_url, params=params)
+    # response = requests.get(api_url, params=params)
+    return None  # Temporary return until API is configured
 
     if response.status_code != 200:
         return None
