@@ -270,7 +270,6 @@ class ForFun(commands.Cog):
 
     @app_commands.command(name="끝말잇기", description="듐바륨")
     async def shiritori(self, interaction: discord.Interaction, word: str):
-        global used_words
 
         if word.lower() == "q":
             used_words.clear()

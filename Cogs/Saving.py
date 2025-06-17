@@ -60,7 +60,7 @@ class Saving(commands.Cog):
             saving.store_goods(name.display_name, goods, formatted_date)
 
             await asyncio.sleep(6 * 24 * 60 * 60)
-            if book.get_storage(name) is not None:
+            if saving.get_storage(name.display_name) is not None:
                 await name.send(
                     f"> {name.mention}님의 물품 보관 시간이 1일 남았습니다."
                 )
