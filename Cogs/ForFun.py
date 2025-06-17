@@ -77,15 +77,16 @@ def first_consonant_change(char):
     return chr(new_code)
 
 
-async def get_gpt_response(prompt):
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",  # GPT-4 모델 사용
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return response["choices"][0]["message"]["content"]
-    except Exception as e:
-        return f"에러 발생: {str(e)}"
+# TODO: Uncomment when openai is properly imported and configured
+# async def get_gpt_response(prompt):
+#     try:
+#         response = openai.ChatCompletion.create(
+#             model="gpt-4",  # GPT-4 모델 사용
+#             messages=[{"role": "user", "content": prompt}],
+#         )
+#         return response["choices"][0]["message"]["content"]
+#     except Exception as e:
+#         return f"에러 발생: {str(e)}"
 
 
 # Class =======================================================
