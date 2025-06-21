@@ -34,6 +34,11 @@ class Sql(commands.Cog):
         command: app_commands.Choice[str],
         sql: str,
     ):
+        if interaction.user.avatar is not None:
+            avatar = interaction.user.avatar.url
+        else:
+            avatar = url
+            
         role = discord.utils.get(interaction.user.roles, id=1181080308590858361)
         if role is None:
             embed = e.get_embed(":warning: 명령어 사용 권한이 없습니다.", error=True)
@@ -92,7 +97,7 @@ class Sql(commands.Cog):
             await interaction.response.send_message(embed=embed)
             book.restart()
             return
-        except InFailedSqlTransaction:
+        except psycopg2.errors.InFailedSqlTransaction:
             embed = e.get_embed(":warning: 반환값이 없습니다.", error=True)
             embed.set_author(
                 name=interaction.user.display_name, icon_url=interaction.user.avatar.url

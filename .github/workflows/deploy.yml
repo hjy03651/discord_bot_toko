@@ -1,9 +1,7 @@
-name: Deploy to Remote Server
+name: Deploy to Lightsail Server
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,13 +13,13 @@ jobs:
     steps:
       - name: Setup SSH Key
         run: |
-          echo "${{ secrets.SSH_KEY }}" | base64 -d > key.pem
-          chmod 600 key.pem
+          echo "${{ secrets.KEY }}" > KEY.pem
+          chmod 600 KEY.pem
 
-      - name: Pull and Restart on Server
+      - name: Deploy to Server
         run: |
-          ssh -i key.pem -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd ${{ secrets.REMOTE_DIR }}
+          ssh -i KEY.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd toko
             echo "[INFO] Pulling latest changes..."
             git pull origin main
             echo "[INFO] Stopping old container..."
@@ -30,5 +28,5 @@ jobs:
             echo "[INFO] Rebuilding image..."
             docker build -t discord-bot-toko .
             echo "[INFO] Starting container..."
-            docker run -d --name discord-bot-toko --env-file .env --rm discord-bot-toko
+            docker run --rm -d --name discord-bot-toko --env-file .env discord-bot-toko
           EOF

@@ -25,13 +25,15 @@ def get_embed(desc, error=False, title=None):
     if error and title is None:
         title = "오류가 발생했습니다."
         color = 0xDB5060
-    elif title[:5] == "호박 재배":
+    elif error:
+        color = 0xDB5060
+    elif title and len(title) >= 5 and title[:5] == "호박 재배":
         color = 0xDB810B
     elif title in ("호박(?) 재배", "호...호 불면은"):
         color = 0x77B255
     elif title == "벌레 재배":
         color = 0x844823
-    elif not error:
+    else:
         color = 0x23A55A  # default
 
     return discord.Embed(title=title, description=desc, color=color)

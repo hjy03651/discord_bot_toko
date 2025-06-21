@@ -272,6 +272,11 @@ class BookRetrieval(commands.Cog):
         self, interaction: discord.Interaction, name: discord.Member, book_id: str
     ):
         try:
+            if interaction.user.avatar is not None:
+                avatar = interaction.user.avatar.url
+            else:
+                avatar = url
+                
             if interaction.channel_id not in (1280321483285074047, 1272086876638937130):
                 embed = e.get_embed(
                     ":warning: 이 커맨드는 도서관 채널에서만 사용 가능합니다!",
