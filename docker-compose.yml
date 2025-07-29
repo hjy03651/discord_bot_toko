@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  discord-bot-toko:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: discord-bot-toko
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - bot-network
+
+networks:
+  bot-network:
+    driver: bridge
