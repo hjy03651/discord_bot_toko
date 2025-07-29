@@ -9,7 +9,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from DBclass import Databases
 from DBtoolBook import ManageBook
-from DBtoolEvent import ManageEvent
+from DBtoolEvent import ManageEvents
 from DBtoolSaving import ManageSaving
 
 
@@ -26,7 +26,7 @@ class DBreconnection(commands.Cog):
         """Initialize database connections"""
         try:
             self.book = ManageBook()
-            self.event = ManageEvent()
+            self.event = ManageEvents()
             self.saving = ManageSaving()
         except Exception as e:
             print(f"Failed to initialize database connections: {e}")
@@ -70,7 +70,7 @@ class DBreconnection(commands.Cog):
             
             # If test connection successful, reinitialize all connections
             self.book = ManageBook()
-            self.event = ManageEvent()
+            self.event = ManageEvents()
             self.saving = ManageSaving()
             
             # Update global book instance in other cogs if they exist
