@@ -33,76 +33,78 @@ class DBreconnection(commands.Cog):
 
     @app_commands.command(name="dbreconnect", description="데이터베이스 재연결")
     async def dbreconnect(self, interaction: discord.Interaction):
-        """Reconnect to database"""
+        """Reconnect to database using robust reconnection logic"""
         await interaction.response.defer()
         
-        success = True
-        error_msg = ""
+        success_count = 0
+        failed_handlers = []
         
-        try:
-            # Close existing connections if they exist
-            if self.book:
+        # Attempt to reconnect each handler
+        handlers = [
+            ("book", self.book, "ManageBook"),
+            ("event", self.event, "ManageEvents"), 
+            ("saving", self.saving, "ManageSaving")
+        ]
+        
+        for name, handler, class_name in handlers:
+            if handler:
+                # Try to reconnect existing handler
+                if handler.reconnect():
+                    success_count += 1
+                    print(f"Successfully reconnected {name} handler")
+                else:
+                    failed_handlers.append(f"{name} ({class_name})")
+                    print(f"Failed to reconnect {name} handler")
+            else:
+                # Handler doesn't exist, try to create new one
                 try:
-                    self.book.__del__()
-                except:
-                    pass
-            if self.event:
-                try:
-                    self.event.__del__()
-                except:
-                    pass
-            if self.saving:
-                try:
-                    self.saving.__del__()
-                except:
-                    pass
-            
-            # Try to reconnect
-            load_dotenv()
-            test_conn = psycopg2.connect(
-                host=os.getenv("DB_HOST"),
-                dbname=os.getenv("DB_NAME"),
-                user=os.getenv("DB_USER"),
-                password=os.getenv("DB_PASSWORD"),
-                port=os.getenv("DB_PORT"),
-            )
-            test_conn.close()
-            
-            # If test connection successful, reinitialize all connections
-            self.book = ManageBook()
-            self.event = ManageEvents()
-            self.saving = ManageSaving()
-            
-            # Update global book instance in other cogs if they exist
+                    if name == "book":
+                        self.book = ManageBook()
+                        success_count += 1
+                    elif name == "event":
+                        self.event = ManageEvents()
+                        success_count += 1
+                    elif name == "saving":
+                        self.saving = ManageSaving()
+                        success_count += 1
+                    print(f"Successfully created new {name} handler")
+                except Exception as err:
+                    failed_handlers.append(f"{name} ({class_name})")
+                    print(f"Failed to create new {name} handler: {err}")
+        
+        # Update database instances in other cogs with successfully reconnected handlers
+        if success_count > 0:
             for cog_name in ["BookRetrieval", "Sql", "Event", "Saving"]:
                 cog = self.bot.get_cog(cog_name)
-                if cog and hasattr(cog, 'book'):
-                    cog.book = self.book
-                if cog and hasattr(cog, 'event'):
-                    cog.event = self.event
-                if cog and hasattr(cog, 'saving'):
-                    cog.saving = self.saving
-            
-        except psycopg2.OperationalError as err:
-            success = False
-            error_msg = f"Database connection failed: {str(err)}"
-        except Exception as err:
-            success = False
-            error_msg = f"Unexpected error: {str(err)}"
+                if cog:
+                    if hasattr(cog, 'book') and self.book and self.book.is_connected():
+                        cog.book = self.book
+                    if hasattr(cog, 'event') and self.event and self.event.is_connected():
+                        cog.event = self.event
+                    if hasattr(cog, 'saving') and self.saving and self.saving.is_connected():
+                        cog.saving = self.saving
         
-        if success:
-            embed = embedding.get_embed("✅ 데이터베이스 재연결 성공!", title="재연결 완료")
-            embed.set_author(
-                name=interaction.user.display_name,
-                icon_url=interaction.user.avatar.url if interaction.user.avatar else None
-            )
+        # Create response embed based on results
+        if success_count == 3:
+            # All handlers reconnected successfully
+            embed = embedding.get_embed("✅ 모든 데이터베이스 연결이 성공적으로 재연결되었습니다!", title="재연결 완료")
+            embed.add_field(name="재연결된 핸들러", value="📚 ManageBook\n📅 ManageEvents\n💾 ManageSaving", inline=False)
+        elif success_count > 0:
+            # Partial success
+            embed = embedding.get_embed("⚠️ 일부 데이터베이스 연결이 재연결되었습니다", title="부분 재연결")
+            embed.add_field(name="성공", value=f"{success_count}/3 핸들러", inline=True)
+            if failed_handlers:
+                embed.add_field(name="실패", value="\n".join(failed_handlers), inline=True)
         else:
-            embed = embedding.get_embed(f"🐱 재연결 실패! 서버 관리자에게 문의하세요", error=True)
-            embed.add_field(name="오류 내용", value=error_msg[:1024], inline=False)
-            embed.set_author(
-                name=interaction.user.display_name,
-                icon_url=interaction.user.avatar.url if interaction.user.avatar else None
-            )
+            # Complete failure
+            embed = embedding.get_embed("🐱 모든 데이터베이스 재연결이 실패했습니다! 서버 관리자에게 문의하세요", error=True)
+            if failed_handlers:
+                embed.add_field(name="실패한 핸들러", value="\n".join(failed_handlers), inline=False)
+        
+        embed.set_author(
+            name=interaction.user.display_name,
+            icon_url=interaction.user.avatar.url if interaction.user.avatar else None
+        )
         
         await interaction.followup.send(embed=embed)
 
