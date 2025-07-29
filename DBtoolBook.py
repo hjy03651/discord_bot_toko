@@ -274,6 +274,3 @@ class ManageBook(Databases):
 
     def restart(self):
         self.db.rollback()
-
-
-book = ManageBook()

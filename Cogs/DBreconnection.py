@@ -83,12 +83,12 @@ class DBreconnection(commands.Cog):
                 if cog and hasattr(cog, 'saving'):
                     cog.saving = self.saving
             
-        except psycopg2.OperationalError as e:
+        except psycopg2.OperationalError as err:
             success = False
-            error_msg = f"Database connection failed: {str(e)}"
-        except Exception as e:
+            error_msg = f"Database connection failed: {str(err)}"
+        except Exception as err:
             success = False
-            error_msg = f"Unexpected error: {str(e)}"
+            error_msg = f"Unexpected error: {str(err)}"
         
         if success:
             embed = e.get_embed("✅ 데이터베이스 재연결 성공!", title="재연결 완료")
