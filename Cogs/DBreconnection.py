@@ -2,7 +2,7 @@
 import os
 import discord
 import psycopg2
-import embedding as e
+import embedding
 
 from discord import app_commands
 from discord.ext import commands
@@ -91,13 +91,13 @@ class DBreconnection(commands.Cog):
             error_msg = f"Unexpected error: {str(err)}"
         
         if success:
-            embed = e.get_embed("✅ 데이터베이스 재연결 성공!", title="재연결 완료")
+            embed = embedding.get_embed("✅ 데이터베이스 재연결 성공!", title="재연결 완료")
             embed.set_author(
                 name=interaction.user.display_name,
                 icon_url=interaction.user.avatar.url if interaction.user.avatar else None
             )
         else:
-            embed = e.get_embed(f"🐱 재연결 실패! 서버 관리자에게 문의하세요", error=True)
+            embed = embedding.get_embed(f"🐱 재연결 실패! 서버 관리자에게 문의하세요", error=True)
             embed.add_field(name="오류 내용", value=error_msg[:1024], inline=False)
             embed.set_author(
                 name=interaction.user.display_name,
