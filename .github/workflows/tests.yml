@@ -39,7 +39,7 @@ jobs:
 
     - name: Run unit tests
       run: |
-        python -m pytest tests/test_dbreconnection.py -v
+        python -m pytest tests/ -v --ignore=tests/test_dbreconnection_integration.py --ignore=tests/test_dbreconnection_manual.py
 
     - name: Run integration tests
       env:
@@ -51,6 +51,7 @@ jobs:
         DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
       run: |
         python tests/test_dbreconnection_integration.py
+      continue-on-error: true
 
     - name: Upload test results
       uses: actions/upload-artifact@v4

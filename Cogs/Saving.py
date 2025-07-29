@@ -60,7 +60,7 @@ class Saving(commands.Cog):
             saving.store_goods(name.display_name, goods, formatted_date)
 
             await asyncio.sleep(6 * 24 * 60 * 60)
-            if book.get_storage(name) is not None:
+            if saving.get_storage(name.display_name) is not None:
                 await name.send(
                     f"> {name.mention}님의 물품 보관 시간이 1일 남았습니다."
                 )
@@ -70,12 +70,10 @@ class Saving(commands.Cog):
     async def return_goods(
         self, interaction: discord.Interaction, name: discord.Member
     ):
-        if interaction.user.avatar is not None and name.avatar is not None:
+        if interaction.user.avatar is not None:
             avatar = interaction.user.avatar.url
-            member_avatar = name.display_avatar.url
         else:
             avatar = url
-            member_avatar = url
 
         role = discord.utils.get(interaction.user.roles, id=1181080308590858361)
         if role is None:

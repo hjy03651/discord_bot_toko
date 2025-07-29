@@ -16,33 +16,33 @@ used_words = []
 
 # Functions ===================================================
 def get_next_word_from_api(last_letter):
-    params = {
-        "key": words_api,
-        "q": last_letter,
-        "req_type": "json",
-        "advanced": "y",
-        "method": "start",
-        "type1": "word",
-        "pos": [1, 2],
-        "num": 100,
-    }
+    # TODO: Define words_api and api_url or get from environment
+    # params = {
+    #     "key": words_api,
+    #     "q": last_letter,
+    #     "req_type": "json",
+    #     "advanced": "y",
+    #     "method": "start",
+    #     "type1": "word",
+    #     "pos": [1, 2],
+    #     "num": 100,
+    # }
 
-    response = requests.get(api_url, params=params)
+    # response = requests.get(api_url, params=params)
+    # if response.status_code != 200:
+    #     return None
 
-    if response.status_code != 200:
-        return None
+    # data = response.json()
 
-    data = response.json()
+    # if "channel" in data and "item" in data["channel"]:
+    #     words = [
+    #         item["word"].replace("-", "")
+    #         for item in data["channel"]["item"]
+    #         if item["word"] not in used_words and len(item["word"]) > 1
+    #     ]
+    #     return random.choice(words) if words else None
 
-    if "channel" in data and "item" in data["channel"]:
-        words = [
-            item["word"].replace("-", "")
-            for item in data["channel"]["item"]
-            if item["word"] not in used_words and len(item["word"]) > 1
-        ]
-        return random.choice(words) if words else None
-
-    return None
+    return None  # Temporary return until API is configured
 
 
 def has_final_consonant(char):
@@ -75,15 +75,16 @@ def first_consonant_change(char):
     return chr(new_code)
 
 
-async def get_gpt_response(prompt):
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",  # GPT-4 모델 사용
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return response["choices"][0]["message"]["content"]
-    except Exception as e:
-        return f"에러 발생: {str(e)}"
+# TODO: Uncomment when openai is properly imported and configured
+# async def get_gpt_response(prompt):
+#     try:
+#         response = openai.ChatCompletion.create(
+#             model="gpt-4",  # GPT-4 모델 사용
+#             messages=[{"role": "user", "content": prompt}],
+#         )
+#         return response["choices"][0]["message"]["content"]
+#     except Exception as e:
+#         return f"에러 발생: {str(e)}"
 
 
 # Class =======================================================
@@ -261,13 +262,13 @@ class ForFun(commands.Cog):
             await interaction.response.send_message("프롬프트를 입력해주세요!")
             return
 
-        await interaction.response.send_message("답변 생성 중...")
-        response = await get_gpt_response(prompt)
-        await interaction.followup.send(response)
+        # TODO: Enable when openai is configured
+        await interaction.response.send_message("GPT 기능은 현재 사용할 수 없습니다.")
+        # response = await get_gpt_response(prompt)
+        # await interaction.followup.send(response)
 
     @app_commands.command(name="끝말잇기", description="듐바륨")
     async def shiritori(self, interaction: discord.Interaction, word: str):
-        global used_words
 
         if word.lower() == "q":
             used_words.clear()
