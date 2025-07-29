@@ -45,7 +45,7 @@ for i in channel_list:
 
 
 async def load_extensions():
-    for filename in "BookRetrieval Event ForFun Saving Sql".split():
+    for filename in "BookRetrieval Event ForFun Saving Sql DBreconnection".split():
         await bot.load_extension(f"Cogs.{filename}")
 
 
@@ -134,7 +134,7 @@ async def clear(ctx):
 async def reload(ctx, extension: str):
     try:
         if extension == "help":
-            files = "BookRetrieval Event ForFun Saving Sql".split()
+            files = "BookRetrieval Event ForFun Saving Sql DBreconnection".split()
             context = "\n".join(["## 현재 Cogs 리스트"] + [f"> {cog}" for cog in files])
             await ctx.send(context)
         else:
