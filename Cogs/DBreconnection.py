@@ -28,8 +28,8 @@ class DBreconnection(commands.Cog):
             self.book = ManageBook()
             self.event = ManageEvents()
             self.saving = ManageSaving()
-        except Exception as e:
-            print(f"Failed to initialize database connections: {e}")
+        except Exception as err:
+            print(f"Failed to initialize database connections: {err}")
 
     @app_commands.command(name="dbreconnect", description="데이터베이스 재연결")
     async def dbreconnect(self, interaction: discord.Interaction):
