@@ -38,7 +38,7 @@ class Sql(commands.Cog):
             avatar = interaction.user.avatar.url
         else:
             avatar = url
-            
+
         role = discord.utils.get(interaction.user.roles, id=1181080308590858361)
         if role is None:
             embed = e.get_embed(":warning: 명령어 사용 권한이 없습니다.", error=True)

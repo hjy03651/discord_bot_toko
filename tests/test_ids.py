@@ -1,4 +1,5 @@
 """Tests for ids.py module."""
+
 import pytest
 from ids import increment_alpha
 
