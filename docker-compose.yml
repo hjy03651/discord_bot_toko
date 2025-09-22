@@ -1,6 +1,40 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: toko-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-toko_db}
+      POSTGRES_USER: ${DB_USER:-toko_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-toko_password}
+      # PostgreSQL connection settings for stability
+      POSTGRES_INITDB_ARGS: "--auth-host=md5"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    restart: unless-stopped
+    networks:
+      - bot-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-toko_user} -d ${DB_NAME:-toko_db}"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    command: >
+      sh -c "
+        echo 'tcp_keepalives_idle = 300' >> /var/lib/postgresql/data/postgresql.conf &&
+        echo 'tcp_keepalives_interval = 30' >> /var/lib/postgresql/data/postgresql.conf &&
+        echo 'tcp_keepalives_count = 3' >> /var/lib/postgresql/data/postgresql.conf &&
+        echo 'idle_in_transaction_session_timeout = 600000' >> /var/lib/postgresql/data/postgresql.conf &&
+        echo 'statement_timeout = 0' >> /var/lib/postgresql/data/postgresql.conf &&
+        postgres
+      "
+
   discord-bot-toko:
     build:
       context: .
@@ -9,9 +43,29 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - bot-network
+    environment:
+      - DB_HOST=postgres
+
+volumes:
+  postgres_data:
 
 networks:
   bot-network:
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.driver.mtu: "1500"
+      # Network stability settings
+      com.docker.network.bridge.default_bridge: "false"
+      com.docker.network.bridge.host_binding_ipv4: "0.0.0.0"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
